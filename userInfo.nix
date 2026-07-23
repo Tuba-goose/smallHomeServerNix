@@ -6,6 +6,7 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  networking.firewall.trustedInterfaces = [ "tailscale0"];
 
   # Set your time zone.
   time.timeZone = "America/Detroit";
