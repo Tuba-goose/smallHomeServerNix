@@ -74,13 +74,18 @@
 
 				ports = [ "2368:2368" ];
 
-				extraOptions = [ "--user" "1000:1000" ];
-
 				volumes = [
 					"/data/blog:/var/lib/ghost/content"
 				];
 
 				environment.url = "https://blog.harmonichell.com";
+
+				cmd = [
+        				"sh" "-c" ''
+            				echo '{"url":"https://blog.harmonichell.com","server":{"port":2368,"host":"::"},"mail":{"transport":"Direct"},"logging":{"transports":["file","stdout"]},"process":"local","paths":{"contentPath":"/var/lib/ghost/content"}}' > config.production.json && exec node current/index.js
+        				''
+    				];
+				
 			};
 
 			caddy = {
