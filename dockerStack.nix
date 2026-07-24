@@ -41,8 +41,7 @@
 					NEXTCLOUD_TRUSTED_DOMAINS = "cloud.example.com";
 				};
 				
-				# TODO: uncomment this part
-				# enviromentFiles = [ config.sops.secrets."nextcloud-env".path ];
+				enviromentFiles = [ config.sops.secrets."nextcloud-env".path ];
 			};
 			
 			navidrome = {
