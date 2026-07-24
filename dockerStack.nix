@@ -74,11 +74,13 @@
 
 				ports = [ "2368:2368" ];
 
+				extraOptions = [ "--user" "1000:1000" ];
+
 				volumes = [
 					"/data/blog:/var/lib/ghost/content"
 				];
 
-			#	environment.url = "https://blog.harmonichell.com";
+				environment.url = "https://blog.harmonichell.com";
 			};
 
 			caddy = {
@@ -88,7 +90,7 @@
 				ports = [ "80:80" ];
 
 				volumes = [
-					"/data/caddy/Caddyfile:/etc/caddy/Caddyfile:ro"
+					"/data/caddy/Caddyfile/Caddyfile:/etc/caddy/Caddyfile:ro"
 				];
 			};
 
