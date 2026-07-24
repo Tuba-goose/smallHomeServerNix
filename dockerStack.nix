@@ -4,11 +4,16 @@
 		enable = true;
 		autoPrue = {
 			enable = true;
-			dates = 'weekly";
+			dates = "weekly";
 		};
 	};
 
 	users.users.evelynn.extraGroups = [ "docker" ];
+
+	sops.defaultSopsFile = ./secrets.yaml;
+	sops.age.keyFile - "/var/lib/sops-nix/key.txt";
+
+	sops.secrets."nextcloud-env" = { };
 
 	networking.firewall.allowedTCPPorts = [];
 
@@ -18,6 +23,7 @@
 		"d /data/blog 0755 evelynn users -"
 		"d /data/media/ 0755 evelynn users -"
 		"d /data/caddy 0755 evelynn users -"
+		"d /data/media/music 0777 evelynn users -"
 	];
 
 	virtualisation.oci-containers = {
@@ -32,6 +38,7 @@
 
 				volumes = [
 					"/data/nextcloud:/var/www/html"
+					"/data/media/music:/mnt/music-library"
 				];
 
 				enviroment = {
@@ -54,6 +61,10 @@
 					"/data/navidrome:/data"
 					"/data/media/music:/music:ro"
 				];
+
+				enviroment = {
+					ND_SCANSCHEDULE = "1h";
+				};
 			};
 
 			blog = {
