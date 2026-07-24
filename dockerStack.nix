@@ -78,7 +78,7 @@
 					"/data/blog:/var/lib/ghost/content"
 				];
 
-			#	environment.url = "https://harmonichell.com";
+			#	environment.url = "https://blog.harmonichell.com";
 			};
 
 			caddy = {
