@@ -67,8 +67,7 @@
 					"/data/blog:/var/lib/ghost/content"
 				];
 
-				# TODO: uncoment this line
-			#	enviroment.url = "https://blog.example.com";
+			#	enviroment.url = "https://example.com";
 			};
 
 			caddy = {
