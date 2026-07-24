@@ -92,6 +92,8 @@
 				image = "caddy:latest";
 				autoStart = true;
 
+				extraOptions = [ "--network=host" ];
+
 				ports = [ "80:80" ];
 
 				volumes = [
