@@ -2,7 +2,7 @@
 
 	virtualisation.docker = {
 		enable = true;
-		autoPrue = {
+		autoPrune = {
 			enable = true;
 			dates = "weekly";
 		};
@@ -11,9 +11,10 @@
 	users.users.evelynn.extraGroups = [ "docker" ];
 
 	sops.defaultSopsFile = ./secrets.yaml;
-	sops.age.keyFile - "/var/lib/sops-nix/key.txt";
+	sops.age.keyFile = "/var/lib/sops-nix/key.txt";
 
 	sops.secrets."nextcloud-env" = { };
+	sops.secrets."cloudflared-env" = { };
 
 	networking.firewall.allowedTCPPorts = [];
 
@@ -32,23 +33,23 @@
 		containers = {
 			nextcloud = {
 				image = "nextcloud:latest";
-				autostart = true;
+				autoStart = true;
 
-				ports = [ "8080:80 ];
+				ports = [ "8080:80" ];
 
 				volumes = [
 					"/data/nextcloud:/var/www/html"
 					"/data/media/music:/mnt/music-library"
 				];
 
-				enviroment = {
+				environment = {
 					NEXTCLOUD_ADMIN_USER = "admin";
 
 					# TODO: update domain
-					NEXTCLOUD_TRUSTED_DOMAINS = "cloud.example.com";
+					NEXTCLOUD_TRUSTED_DOMAINS = "cloud.harmonichell.com";
 				};
 				
-				enviromentFiles = [ config.sops.secrets."nextcloud-env".path ];
+				environmentFiles = [ config.sops.secrets."nextcloud-env".path ];
 			};
 			
 			navidrome = {
@@ -62,7 +63,7 @@
 					"/data/media/music:/music:ro"
 				];
 
-				enviroment = {
+				environment = {
 					ND_SCANSCHEDULE = "1h";
 				};
 			};
@@ -71,13 +72,13 @@
 				image = "ghost:5-alpine";
 				autoStart = true;
 
-				ports [ "2368:2368" ];
+				ports = [ "2368:2368" ];
 
 				volumes = [
 					"/data/blog:/var/lib/ghost/content"
 				];
 
-			#	enviroment.url = "https://example.com";
+			#	environment.url = "https://harmonichell.com";
 			};
 
 			caddy = {
@@ -91,7 +92,18 @@
 				];
 			};
 
-			
+		 	cloudflared = {
+				image = "cloudflare/cloudflared:latest";
+				autoStart = true;
+
+				# tells cloudflared to run as a tunnel
+				cmd = [ "tunnel" "--no-autoupdate" "run" ];
+
+				#let the container access the other networks
+				extraOptions = [ "--network=host" ];
+
+				environmentFiles = [ config.sops.secrets."cloudflared-env".path ];
+			};	
 		};
 	};
 }
